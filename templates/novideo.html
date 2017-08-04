@@ -1,0 +1,120 @@
+$def with()
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>domoroboto</title>
+    <style>
+      .button-control {
+        display: none;
+      }
+
+      .control-knob {
+        position: relative;
+        width: 200px;
+        height: 200px;
+        border: 2px solid #777;
+        border-radius: 100px;
+      }
+
+      .control-knob-stick {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        background: #888;
+        border-radius: 50px;
+        top: 50px; left: 50px;
+      }
+    </style>
+    <!-- <script type="text/javascript" src="static/js/jquery-2.0.0.min.js"></script> -->
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.min.js"
+      integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+      crossorigin="anonymous"></script>
+    <script
+      src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+      integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+      crossorigin="anonymous"></script>
+
+
+  </head>
+  <body>
+    <div class="control-knob">
+      <div id="robot-control-knob" class="control-knob-stick">
+      
+      </div>
+    </div>
+
+    <button id="forward" class="button-control">Forward</button>
+    <button id="reverse" class="button-control">Reverse</button>
+    <button id="right" class="button-control">Right</button>
+    <button id="left" class="button-control">Left</button>
+
+<script type="text/javascript">
+    var move = function(elem) {
+      jQuery.ajax({
+        type: 'POST',
+        url: '/move',
+        data: {
+          x: parseInt(elem.style.left) - 50,
+          y: 50 - parseInt(elem.style.top)
+        }
+      });
+    };
+
+    var stop = function() {
+      jQuery.ajax({
+        type: 'POST',
+        url: '/stop'
+      })
+    };
+
+    jQuery('.control-knob-stick').draggable({
+      containment: 'parent',
+      start: function(ev, elem) {
+        ev.target.style.transition = '';
+      },
+      drag: function(ev, elem) {
+        move(ev.target);
+      },
+      stop: function(ev, elem) {
+        ev.target.style.transition = 'top 400ms, left 400ms';
+        ev.target.style.top = '50px';
+        ev.target.style.left = '50px';
+        stop();
+      }
+    });
+
+    jQuery('#forward').click(function(){ 
+         jQuery.ajax({ 
+             type: "GET",
+             dataType: "text",
+             url: "/forward"
+         });
+    });
+    jQuery('#reverse').click(function(){ 
+         jQuery.ajax({ 
+             type: "GET",
+             dataType: "text",
+             url: "/reverse"
+         });
+    });
+    jQuery('#right').click(function(){ 
+         jQuery.ajax({ 
+             type: "GET",
+             dataType: "text",
+             url: "/right"
+         });
+    });
+    jQuery('#left').click(function(){ 
+         jQuery.ajax({ 
+             type: "GET",
+             dataType: "text",
+             url: "/left"
+         });
+    });
+
+</script>
+
+  </body>
+</html>
